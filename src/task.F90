@@ -1,79 +1,130 @@
-#if !defined(_KIND)
-#define _KIND 8
-#endif
+module mm
+    contains
+    subroutine run_mm0(N)
+    use matrix_multiplication, only : mm0
 
+    real(kind= 8), allocatable :: first(:, :), second(:, :), result(:, :)
+    real :: start, finish
+    integer(kind=4) :: i, j, status
+    integer(kind=4), intent(in) :: N
 
-PROGRAM task
+    allocate(first(n, n))
+    allocate(second(n, n))
+    allocate(result(n, n))
 
+    do i=1,N
+        do j=1,N
+            first(i, j) = i*j + 10
+            second(i, j) = i**j + 1
+        enddo
+    enddo
 
-    use gauss
-    use matrice_ops
+    call cpu_time(start)
+    call mm0(first, second, result, status)
+    call cpu_time(finish)
+    print '(i8, f10.4)',N, finish-start
 
-    implicit none
-    integer(kind=4)                                              :: size
-    real(kind=_KIND)                                             :: P1, P2, P3, numeric_error_mean = 0
-    real(kind=_KIND), dimension(:,:), allocatable                :: matrice
-    real(kind=_KIND), dimension(:), allocatable                  :: X, correct_X
-    integer(kind=4)                                              :: i, j
-    character(len=1024)                                          :: filename_1, filename_2, filename_3
+    end subroutine
 
-    write (filename_3, "(A13, I2)") "graphs/error_", _KIND
-    open(unit=3, file=filename_3)
+    subroutine run_mm1(N)
+    use matrix_multiplication, only : mm1
 
-    do i=1,400
-        write(*,*) 8
-        size = i
+    real(kind= 8), allocatable :: first(:, :), second(:, :), result(:, :)
+    real :: start, finish
+    integer(kind=4) :: i, j, status
+    integer(kind=4), intent(in) :: N
 
-        P1 = 1.0*(size**2)
-        P2 = -2.0*(size**2)
-        P3 = 1.0*(size**2)
+    allocate(first(n, n))
+    allocate(second(n, n))
+    allocate(result(n, n))
 
+    do i=1,N
+        do j=1,N
+            first(i, j) = i*j + 10
+            second(i, j) = i**j + 1
+        enddo
+    enddo
 
-        allocate ( matrice(size, size) )
-        allocate (X(size))
-        allocate (correct_X(size))
+    call cpu_time(start)
+    call mm1(first, second, result, status)
+    call cpu_time(finish)
+    print '(i8, f10.4)',N, finish-start
 
-        matrice(:,:) = 0
-        X(:) = 0.0
-        X(size) = 1
+    end subroutine
 
-        do j=1,size
-            correct_X(j) = 1.0*j/size
-        end do
+    subroutine run_mm2(N)
+    use matrix_multiplication, only : mm2
 
+    real(kind= 8), allocatable :: first(:, :), second(:, :), result(:, :)
+    real :: start, finish
+    integer(kind=4) :: i, j, status
+    integer(kind=4), intent(in) :: N
 
+    allocate(first(n, n))
+    allocate(second(n, n))
+    allocate(result(n, n))
 
-        call fill_matrice(P1, P2, P3, size, matrice)
-        call gauss_elimination(matrice, X, size)
-        X = X * real(size * (size + 1) * (-1))
-        !write(*,*) X
-        numeric_error_mean = abs(sum(correct_X - X)/size)
-        write(3,*) size, numeric_error_mean
+    do i=1,N
+        do j=1,N
+            first(i, j) = i*j + 10
+            second(i, j) = i**j + 1
+        enddo
+    enddo
 
+    call cpu_time(start)
+    call mm2(first, second, result, status)
+    call cpu_time(finish)
+    print '(i8, f10.4)',N, finish-start
 
-        write(*, *) 'Numeric errror mean for n =', size, ' equals ', numeric_error_mean
-        write (filename_1, "(A13, I2, A1, I2)") "graphs/data_o", _KIND, "_", i
-        write (filename_2, "(A15, I2, A1, I2)") "graphs/data_c_o", _KIND, "_", i
+    end subroutine
 
-        open(unit=1, file=filename_1)
-        open(unit=2, file=filename_2)
+    subroutine run_mm3(N)
+    use matrix_multiplication, only : mm3
 
-        do j=1,size
-            write(1,*) 1.0*j/size, X(j)
-            write(2,*) 1.0*j/size, correct_X(j)
-        end do
-        close(unit=1)
-        close(unit=2)
+    real(kind= 8), allocatable :: first(:, :), second(:, :), result(:, :)
+    real :: start, finish
+    integer(kind=4) :: i, j, status
+    integer(kind=4), intent(in) :: N
 
-        deallocate (matrice, X, correct_X)
+    allocate(first(n, n))
+    allocate(second(n, n))
+    allocate(result(n, n))
 
-    end do
-    close(unit=3)
+    do i=1,N
+        do j=1,N
+            first(i, j) = i*j + 10
+            second(i, j) = i**j + 1
+        enddo
+    enddo
 
+    call cpu_time(start)
+    call mm3(first, second, result, status)
+    call cpu_time(finish)
+    print '(i8, f10.4)',N, finish-start
 
+    end subroutine
 
+    subroutine run_mmlib(N)
 
+    real(kind= 8), allocatable :: first(:, :), second(:, :), result(:, :)
+    real :: start, finish
+    integer(kind=4) :: i, j
+    integer(kind=4), intent(in) :: N
 
+    allocate(first(n, n))
+    allocate(second(n, n))
 
+    do i=1,N
+        do j=1,N
+            first(i, j) = i*j + 10
+            second(i, j) = i**j + 1
+        enddo
+    enddo
 
-END PROGRAM
+    call cpu_time(start)
+    result = MATMUL(first, second)
+    call cpu_time(finish)
+    print '(i8, f10.4)',N, finish-start
+
+    end subroutine
+end module

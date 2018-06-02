@@ -15,15 +15,11 @@ set(CMAKE_TEST_DIR ${CMAKE_SOURCE_DIR}/../tests)
 set(CMAKE_GRAPH_DIR ${CMAKE_SOURCE_DIR}/../graphs)
 
 set(TASK_SOURCES
+    ${CMAKE_SOURCE_DIR}/matrix_multiplication.F90
     ${CMAKE_SOURCE_DIR}/task.F90
-    ${CMAKE_SOURCE_DIR}/gauss.F90
-${CMAKE_SOURCE_DIR}/matrice_ops.F90)
-set(TEST_SOURCES
-    ${CMAKE_SOURCE_DIR}/tests.F90
-    ${CMAKE_SOURCE_DIR}/gauss.F90
-    ${CMAKE_SOURCE_DIR}/fruit.F90
-${CMAKE_SOURCE_DIR}/matrice_ops.F90)
+    ${CMAKE_SOURCE_DIR}/main.F90
 
+)
 
 file(MAKE_DIRECTORY ${CMAKE_TEST_DIR})
 file(MAKE_DIRECTORY ${CMAKE_GRAPH_DIR})
@@ -62,21 +58,22 @@ set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_RELEASE_FLAGS} ${realeaseopts}")
 
 
 add_executable(task ${TASK_SOURCES})
-add_executable(task4 ${TASK_SOURCES})
-add_executable(task16 ${TASK_SOURCES})
-set_target_properties(task PROPERTIES COMPILE_FLAGS "-D\"_KIND=8\"")
-set_target_properties(task4 PROPERTIES COMPILE_FLAGS "-D\"_KIND=4\"")
-set_target_properties(task16 PROPERTIES COMPILE_FLAGS "-D\"_KIND=16\"")
-
-
-
-add_executable(tests ${TEST_SOURCES})
 
 
 enable_testing()
 
-set(run_command "${CMAKE_BINARY_DIR}/tests")
-set(UNIT_TEST_NAME "unit_tests.txt")
+
+set(run_command0 "${CMAKE_BINARY_DIR}/task 100 1000 100 0")
+set(run_command1 "${CMAKE_BINARY_DIR}/task 100 1000 100 1")
+set(run_command2 "${CMAKE_BINARY_DIR}/task 100 1000 100 2")
+set(run_command3 "${CMAKE_BINARY_DIR}/task 100 1000 100 3")
+
+
+set(UNIT_TEST_NAME0 "test0")
+set(UNIT_TEST_NAME1 "test1")
+set(UNIT_TEST_NAME2 "test2")
+set(UNIT_TEST_NAME3 "test3")
+
 
 
 
@@ -91,11 +88,16 @@ add_custom_target(check
 
 add_test( NAME unit_tests
           COMMAND sh -c
-         "rm -f ${CMAKE_TEST_DIR}/${UNIT_TEST_NAME} \
-          && ${run_command} \
-          >> ${CMAKE_TEST_DIR}/${UNIT_TEST_NAME} \
-          && less ${CMAKE_TEST_DIR}/${UNIT_TEST_NAME}"
-          )
+         "rm -f ${CMAKE_GRAPH_DIR}/test* \
+          && ${run_command0} \
+          >> ${CMAKE_GRAPH_DIR}/${UNIT_TEST_NAME0} \
+          && ${run_command1} \
+          >> ${CMAKE_GRAPH_DIR}/${UNIT_TEST_NAME1} \
+          && ${run_command2} \
+          >> ${CMAKE_GRAPH_DIR}/${UNIT_TEST_NAME2} \
+          && ${run_command3} \
+          >> ${CMAKE_GRAPH_DIR}/${UNIT_TEST_NAME3}"
+           )
 
 
 
