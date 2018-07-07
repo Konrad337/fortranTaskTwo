@@ -63,16 +63,18 @@ add_executable(task ${TASK_SOURCES})
 enable_testing()
 
 
-set(run_command0 "${CMAKE_BINARY_DIR}/task 100 1000 100 0")
-set(run_command1 "${CMAKE_BINARY_DIR}/task 100 1000 100 1")
-set(run_command2 "${CMAKE_BINARY_DIR}/task 100 1000 100 2")
-set(run_command3 "${CMAKE_BINARY_DIR}/task 100 1000 100 3")
+set(run_command0 "${CMAKE_BINARY_DIR}/task 100 3000 100 0")
+set(run_command1 "${CMAKE_BINARY_DIR}/task 100 3000 100 1")
+set(run_command2 "${CMAKE_BINARY_DIR}/task 100 3000 100 2")
+set(run_command3 "${CMAKE_BINARY_DIR}/task 100 3000 100 3")
+set(run_command4 "${CMAKE_BINARY_DIR}/task 100 3000 100 4")
 
 
 set(UNIT_TEST_NAME0 "test0")
 set(UNIT_TEST_NAME1 "test1")
 set(UNIT_TEST_NAME2 "test2")
 set(UNIT_TEST_NAME3 "test3")
+set(UNIT_TEST_NAME4 "test4")
 
 
 
@@ -96,7 +98,9 @@ add_test( NAME unit_tests
           && ${run_command2} \
           >> ${CMAKE_GRAPH_DIR}/${UNIT_TEST_NAME2} \
           && ${run_command3} \
-          >> ${CMAKE_GRAPH_DIR}/${UNIT_TEST_NAME3}"
+          >> ${CMAKE_GRAPH_DIR}/${UNIT_TEST_NAME3} \
+          && ${run_command4} \
+          >> ${CMAKE_GRAPH_DIR}/${UNIT_TEST_NAME4}"
            )
 
 

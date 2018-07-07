@@ -113,7 +113,8 @@ module mm
 
     allocate(first(n, n))
     allocate(second(n, n))
-
+    allocate(result(n, n))
+    
     do i=1,N
         do j=1,N
             first(i, j) = i*j + 10
